@@ -77,6 +77,7 @@ clean:
 	@$(REMOVE) $(CXX_LSTFILES)
 	@$(REMOVE) firmware.bin
 	@$(REMOVE) firmware.hex
+	@$(REMOVE) template.elf
 	@$(REMOVE) $(PROJECT).el
 	@$(REMOVE) *.d
 	@$(REMOVE) *.o
