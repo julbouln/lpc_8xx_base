@@ -8,7 +8,7 @@ PROJECT=template
 LDSCRIPT=core/$(MCU).ld
 
 
-C_SRC=$(wildcard core/*.c) $(wildcard chip_8xx/src/*.c)
+C_SRC=$(wildcard core/*.c) $(wildcard chip_8xx/src/*.c) $(wildcard arduino/*.c)
 CXX_SRC=$(wildcard *.cpp) $(wildcard arduino/*.cpp)
 
 C_OBJECTS=$(C_SRC:.c=.o)
@@ -28,7 +28,7 @@ GCFLAGS +=  -fstrict-aliasing -fsingle-precision-constant -funsigned-char -funsi
 # Debug stuff
 GCFLAGS += -Wa,-adhlns=$(<:.c=.lst) -g
 
-GCFLAGS = -Os --specs=nano.specs -ffunction-sections -fdata-sections -fno-builtin -mthumb -mcpu=cortex-m0plus -MD   -Ichip_8xx/inc -Iarduino -D__USE_CMSIS
+GCFLAGS = -Os --specs=nano.specs -ffunction-sections -fdata-sections -fno-builtin -mthumb -mcpu=cortex-m0plus -MD   -Ichip_8xx/inc -Iarduino -D__USE_CMSIS -DMCU$(MCU) 
 
 GCFLAGS += -fno-rtti -fno-exceptions
 
