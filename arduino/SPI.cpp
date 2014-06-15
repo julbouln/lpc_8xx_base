@@ -11,8 +11,27 @@ SPIClass::SPIClass(int spi_n)
 	_spi_n=spi_n;
 }
 
-void SPIClass::begin() {
-	_spi=(_spi_n) ? (LPC_SPI_T *)(LPC_SPI1_BASE) : (LPC_SPI_T *)(LPC_SPI0_BASE);
+void SPIClass::begin(int sck, int mosi, int miso) {
+	
+	// SPI1
+	if(_spi_n) {		
+//		Chip_SWM_DisableFixedPin(SWM_FIXED_VDDCMP);
+		Chip_SWM_MovablePinAssign(SWM_SPI1_SCK_IO, sck);
+		Chip_SWM_MovablePinAssign(SWM_SPI1_MOSI_IO, mosi);
+		Chip_SWM_MovablePinAssign(SWM_SPI1_MISO_IO, miso);
+		_spi=(LPC_SPI_T *)(LPC_SPI1_BASE);
+	}
+	// SPI0
+	else
+	{
+//		Chip_SWM_DisableFixedPin(SWM_FIXED_VDDCMP);
+		Chip_SWM_MovablePinAssign(SWM_SPI0_SCK_IO, sck);
+		Chip_SWM_MovablePinAssign(SWM_SPI0_MOSI_IO, mosi);
+		Chip_SWM_MovablePinAssign(SWM_SPI0_MISO_IO, miso);
+		_spi=(LPC_SPI_T *)(LPC_SPI0_BASE);		
+	}
+//		Chip_SWM_MovablePinAssign(SWM_SPI0_SSEL_IO, 13);
+	
 	
 		ConfigStruct.Mode = SPI_MODE_MASTER;
 		// default 100khz
@@ -30,6 +49,14 @@ void SPIClass::begin() {
 
 		Chip_SPI_Enable(_spi);
 
+}
+
+void SPIClass::begin() {
+		/* SPI0_SCK 1 P0.17 */
+		/* SPI0_MOSI 20 P0.14 */
+	    /* SPI0_MISO 11 P0.15 */
+	
+	begin(17,14,15);
 }
 
 
@@ -82,4 +109,6 @@ void SPIClass::detachInterrupt() {
 
 
 SPIClass SPI(0);
+#ifndef MCUlpc810
 SPIClass SPI1(1);
+#endif

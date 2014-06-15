@@ -1,7 +1,14 @@
-lpc8xx microcontroller development code base.
+[NXP's LPC800 family microcontroller](http://www.nxp.com/products/microcontrollers/cortex_m0_m0/lpc800/) development code base.
 
-Should work with LPC810, LPC811 and LPC812.
+The code should work with LPC810, LPC811 and LPC812.
 
-It uses [LPCOpen 2](http://www.lpcware.com/content/nxpfile/lpcopen-software-development-platform-lpc8xx-packages) source code and inspired by [sebseb7/lpc8xx Makefile](https://github.com/sebseb7/lpc8xx) with arm-none-eabi toolchain.
+The code is based on [LPCOpen 2](http://www.lpcware.com/content/nxpfile/lpcopen-software-development-platform-lpc8xx-packages) source code and [sebseb7/lpc8xx Makefile](https://github.com/sebseb7/lpc8xx) (arm-none-eabi toolchain). The main addition is an Arduino like compatible API.
 
-Added some Arduino like compatible API, ino file can be compiled with ino2firmware.sh script.
+Supported Arduino functions and libraries :
+
+* pinMode, digitalWrite, digitalRead
+* delay
+* Serial
+* SPI
+
+INO files can be compiled with ino2firmware.sh script.

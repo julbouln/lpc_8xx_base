@@ -36,6 +36,20 @@
 #define OCT 8
 #define BIN 2
 
+// Define config for Serial.begin(baud, config);
+#define SERIAL_7N1 UART_CFG_DATALEN_7 | UART_CFG_PARITY_NONE | UART_CFG_STOPLEN_1
+#define SERIAL_8N1 UART_CFG_DATALEN_8 | UART_CFG_PARITY_NONE | UART_CFG_STOPLEN_1
+#define SERIAL_7N2 UART_CFG_DATALEN_7 | UART_CFG_PARITY_NONE | UART_CFG_STOPLEN_2
+#define SERIAL_8N2 UART_CFG_DATALEN_8 | UART_CFG_PARITY_NONE | UART_CFG_STOPLEN_2
+#define SERIAL_7E1 UART_CFG_DATALEN_7 | UART_CFG_PARITY_EVEN | UART_CFG_STOPLEN_1
+#define SERIAL_8E1 UART_CFG_DATALEN_8 | UART_CFG_PARITY_EVEN | UART_CFG_STOPLEN_1
+#define SERIAL_7E2 UART_CFG_DATALEN_7 | UART_CFG_PARITY_EVEN | UART_CFG_STOPLEN_2
+#define SERIAL_8E2 UART_CFG_DATALEN_8 | UART_CFG_PARITY_EVEN | UART_CFG_STOPLEN_2
+#define SERIAL_7O1 UART_CFG_DATALEN_7 | UART_CFG_PARITY_ODD | UART_CFG_STOPLEN_1
+#define SERIAL_8O1 UART_CFG_DATALEN_8 | UART_CFG_PARITY_ODD | UART_CFG_STOPLEN_1
+#define SERIAL_7O2 UART_CFG_DATALEN_7 | UART_CFG_PARITY_ODD | UART_CFG_STOPLEN_2
+#define SERIAL_8O2 UART_CFG_DATALEN_8 | UART_CFG_PARITY_ODD | UART_CFG_STOPLEN_2
+
 #include "uart_8xx.h"
 
 struct ring_buffer;
@@ -54,6 +68,9 @@ private:
     HardwareSerial(int);
     void begin(unsigned long);
     void begin(unsigned long, uint8_t);
+    void begin(unsigned long, int, int);
+    void begin(unsigned long, uint8_t, int, int);
+
     void end();
     virtual int available(void);
     virtual int peek(void);
@@ -98,8 +115,9 @@ private:
 };
 
   extern HardwareSerial Serial;
+#ifndef MCUlpc810
   extern HardwareSerial Serial1;
-
+#endif
 extern void serialEventRun(void) __attribute__((weak));
 
 #endif

@@ -40,23 +40,56 @@ HardwareSerial::HardwareSerial(int uart_n)
 
 // Public Methods //////////////////////////////////////////////////////////////
 
+void HardwareSerial::begin(unsigned long baud, int tx, int rx)
+{
+	begin(baud,SERIAL_8N1,tx,rx);
+}
+
 void HardwareSerial::begin(unsigned long baud)
 {
-	_uart=(_uart_n) ? (LPC_USART_T *)(LPC_USART1_BASE) : (LPC_USART_T *)(LPC_USART0_BASE);
-	
-	Chip_UART_Init(_uart);
-	Chip_UART_ConfigData(_uart, UART_CFG_DATALEN_8 | UART_CFG_PARITY_NONE | UART_CFG_STOPLEN_1);
-	Chip_UART_SetBaud(_uart, baud);
-	Chip_UART_Enable(_uart);
-	Chip_UART_TXEnable(_uart);
-	
-	Chip_UART_IntEnable(_uart, UART_INTEN_RXRDY);
-	Chip_UART_IntDisable(_uart, UART_INTEN_TXRDY);
-	
+	// default pins(P0.4, P0.0)
+	begin(baud,SERIAL_8N1,4,0);
 }
 
 void HardwareSerial::begin(unsigned long baud, byte config)
 {
+	// default pins(P0.4, P0.0)
+	begin(baud,config,4,0);
+
+}
+
+void HardwareSerial::begin(unsigned long baud, byte config, int tx, int rx)
+{
+	Chip_Clock_SetUARTClockDiv(1);	/* divided by 1 */
+
+
+	if(_uart_n) {
+	/* Connect the U0_TXD_O and U0_RXD_I signals  */
+		Chip_SWM_MovablePinAssign(SWM_U1_TXD_O, tx);
+		Chip_SWM_MovablePinAssign(SWM_U1_RXD_I, rx);
+		_uart=(LPC_USART_T *)(LPC_USART1_BASE);
+	}
+	else
+	{
+//		Chip_SWM_DisableFixedPin(SWM_FIXED_ACMP_I1);
+		
+		Chip_SWM_MovablePinAssign(SWM_U0_TXD_O, tx);
+		Chip_SWM_MovablePinAssign(SWM_U0_RXD_I, rx);
+		_uart=(LPC_USART_T *)(LPC_USART0_BASE);		
+	}
+	
+	Chip_UART_Init(_uart);
+//	Chip_UART_ConfigData(_uart, UART_CFG_DATALEN_8 | UART_CFG_PARITY_NONE | UART_CFG_STOPLEN_1);
+	
+	Chip_UART_ConfigData(_uart, config);
+	
+	Chip_UART_SetBaud(_uart, baud);
+	Chip_UART_Enable(_uart);
+	Chip_UART_TXEnable(_uart);
+	
+//		Chip_UART_IntEnable(_uart, UART_INTEN_RXRDY);
+//		Chip_UART_IntDisable(_uart, UART_INTEN_TXRDY);
+	
 }
 
 void HardwareSerial::end()
@@ -285,6 +318,7 @@ HardwareSerial::operator bool() {
 }
 
 HardwareSerial Serial(0);
+#ifndef MCUlpc810
 HardwareSerial Serial1(1);
-
+#endif
 

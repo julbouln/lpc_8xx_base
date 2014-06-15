@@ -12,35 +12,15 @@ void SysTick_Handler(void) {
 //
 
 void pinMode(uint8_t pin, uint8_t mode) {
-	switch (mode)
-	{
-		case INPUT:
-			Chip_GPIO_SetPinDIR(LPC_GPIO_PORT,0,pin,false);
-		case OUTPUT:
-			Chip_GPIO_SetPinDIR(LPC_GPIO_PORT,0,pin,true);
-	}
+	Chip_GPIO_SetPinDIR(LPC_GPIO_PORT,0,pin,mode);
 }
 
 void digitalWrite(uint8_t pin, uint8_t value) {
-	switch (value)
-	{
-	case HIGH:
-	Chip_GPIO_SetPinState(LPC_GPIO_PORT,0,pin,true);
-	break;
-	case LOW:
-	Chip_GPIO_SetPinState(LPC_GPIO_PORT,0,pin,false);
-	break;
-	}
+	Chip_GPIO_SetPinState(LPC_GPIO_PORT,0,pin,value);
 }
 
 int digitalRead(uint8_t pin) {
-    uint32_t regVal = LOW;	
-
-	if(Chip_GPIO_GetPinState(LPC_GPIO_PORT,0,pin))
-	{
-		regVal=HIGH;
-	}
-    return ( regVal );		
+	return (uint32_t)Chip_GPIO_GetPinState(LPC_GPIO_PORT,0,pin);
 }
 int analogRead(uint8_t pin) {
 	// no analog

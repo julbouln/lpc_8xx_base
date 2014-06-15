@@ -48,6 +48,7 @@ public:
   inline void detachInterrupt(); // Default
 
   void begin(); // Default
+  void begin(int,int,int);
   void end();
 
   void setBitOrder(uint8_t);
@@ -56,5 +57,7 @@ public:
 };
 
 extern SPIClass SPI;
-
+#ifndef MCUlpc810
+extern SPIClass SPI1;
+#endif
 #endif
