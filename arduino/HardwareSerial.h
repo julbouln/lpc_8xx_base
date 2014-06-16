@@ -29,12 +29,9 @@
 #include <string.h>
 #include <ctype.h>
 
-//#include "Stream.h"
+#include "Print.h"
 
-#define DEC 10
-#define HEX 16
-#define OCT 8
-#define BIN 2
+//#include "Stream.h"
 
 // Define config for Serial.begin(baud, config);
 #define SERIAL_7N1 UART_CFG_DATALEN_7 | UART_CFG_PARITY_NONE | UART_CFG_STOPLEN_1
@@ -54,15 +51,11 @@
 
 struct ring_buffer;
 
-class HardwareSerial
-	// : public Stream
+class HardwareSerial : public Print
 {
 private:
 	int _uart_n;
 	LPC_USART_T *_uart;
-
-    size_t printNumber(unsigned long, uint8_t);
-    size_t printFloat(double, uint8_t);
 	
   public:
     HardwareSerial(int);
@@ -76,41 +69,17 @@ private:
     virtual int peek(void);
     virtual int read(void);
     virtual void flush(void);
-	size_t write(uint8_t);
+	virtual size_t write(uint8_t);
 	
-    size_t write(const char *str) {
-				return Chip_UART_SendBlocking(_uart,(const uint8_t *)str, strlen(str));
- //     if (str == NULL) return 0;
-//      return write((const uint8_t *)str, strlen(str));
-    }
-    virtual size_t write(const uint8_t *buffer, size_t size);
-    size_t write(const char *buffer, size_t size) {
-      return write((const uint8_t *)buffer, size);
-    }
-	
+	size_t write(const char *str);
+  
+   virtual size_t write(const uint8_t *buffer, size_t size);
+
     inline size_t write(unsigned long n) { return write((uint8_t)n); }
     inline size_t write(long n) { return write((uint8_t)n); }
     inline size_t write(unsigned int n) { return write((uint8_t)n); }
     inline size_t write(int n) { return write((uint8_t)n); }
-	
-    size_t print(const char[]);
-    size_t print(char);
-    size_t print(unsigned char, int = DEC);
-    size_t print(int, int = DEC);
-    size_t print(unsigned int, int = DEC);
-    size_t print(long, int = DEC);
-    size_t print(unsigned long, int = DEC);
-    size_t print(double, int = 2);
-
-    size_t println(const char[]);
-    size_t println(char);
-    size_t println(unsigned char, int = DEC);
-    size_t println(int, int = DEC);
-    size_t println(unsigned int, int = DEC);
-    size_t println(long, int = DEC);
-    size_t println(unsigned long, int = DEC);
-    size_t println(double, int = 2);
-    size_t println(void);
+		using Print::write;
     operator bool();
 };
 

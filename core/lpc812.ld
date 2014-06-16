@@ -26,10 +26,36 @@ SECTIONS
         
         *(.text*)
         *(.rodata .rodata.*)
+		KEEP (*(.init))
+		KEEP (*(.fini))
+		
         . = ALIGN(4);
         
     } > MFlash16
     
+	
+
+    .preinit_array : {
+        PROVIDE_HIDDEN (__preinit_array_start = .);
+        KEEP (*(.preinit_array*))
+        PROVIDE_HIDDEN (__preinit_array_end = .);
+    } >MFlash16
+
+    .init_array : {
+        PROVIDE_HIDDEN (__init_array_start = .);
+        KEEP (*(SORT(.init_array.*)))
+        KEEP (*(.init_array*))
+        PROVIDE_HIDDEN (__init_array_end = .);
+    } >MFlash16
+
+    .fini_array : {
+        PROVIDE_HIDDEN (__fini_array_start = .);
+        KEEP (*(.fini_array*))
+        KEEP (*(SORT(.fini_array.*)))
+        PROVIDE_HIDDEN (__fini_array_end = .);
+    } >MFlash16
+	
+	
     _etext = .;
         
     
@@ -60,4 +86,5 @@ SECTIONS
     
     PROVIDE(_pvHeapStart = .);
     PROVIDE(_vStackTop = __top_RamLoc4 - 0);
+	
 }

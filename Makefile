@@ -9,7 +9,7 @@ LDSCRIPT=core/$(MCU).ld
 
 
 C_SRC=$(wildcard core/*.c) $(wildcard chip_8xx/src/*.c) $(wildcard arduino/*.c)
-CXX_SRC=$(wildcard *.cpp) $(wildcard arduino/*.cpp)
+CXX_SRC=$(wildcard core/*.cpp) $(wildcard *.cpp) $(wildcard arduino/*.cpp)
 
 C_OBJECTS=$(C_SRC:.c=.o)
 C_DEPS=$(C_SRC:.c=.d)
@@ -30,9 +30,9 @@ GCFLAGS += -Wa,-adhlns=$(<:.c=.lst) -g
 
 GCFLAGS = -Os --specs=nano.specs -ffunction-sections -fdata-sections -fno-builtin -mthumb -mcpu=cortex-m0plus -MD   -Ichip_8xx/inc -Iarduino -D__USE_CMSIS -DMCU$(MCU) 
 
-GCFLAGS += -fno-rtti -fno-exceptions
+GCFLAGS += -fno-rtti -fno-exceptions -fpermissive
 
-LDFLAGS = -T$(LDSCRIPT) -nostartfiles  -Wl,--gc-section 
+LDFLAGS = -T$(LDSCRIPT) -Wl,-M,--gc-section > firmware.map
 
 #LDFLAGS = -T$(LDSCRIPT) -Wl,--gc-sections
 
