@@ -234,11 +234,34 @@
 #endif  // CLOCK_SETUP 
 
 
+
+
+#if defined (__cplusplus)
+extern "C" {
+#endif
+	/*
+	int _kill( int pid, int sig )
+	{
+		return 0;
+	}
+	void _exit( int status )
+	{
+	}
+	void * _sbrk (int n)
+	{
+		return (void *)-1;
+	}
+	
+	int _getpid(void)
+	{
+		return 0;
+	}
+	
+	*/
 /*----------------------------------------------------------------------------
   Clock Variable definitions
  *----------------------------------------------------------------------------*/
-uint32_t SystemCoreClock = __SYSTEM_CLOCK;/*!< System Clock Frequency (Core Clock)*/
-
+//uint32_t SystemCoreClock = __SYSTEM_CLOCK;/*!< System Clock Frequency (Core Clock)*/
 
 /**
  * Initialize the system
@@ -251,5 +274,10 @@ uint32_t SystemCoreClock = __SYSTEM_CLOCK;/*!< System Clock Frequency (Core Cloc
  */
 //__attribute__ ((section(".after_vectors")))
 void SystemInit (void) {
-Chip_SystemInit();
+	Chip_SystemInit();
 }
+
+#if defined (__cplusplus)
+} // extern "C"
+#endif
+

@@ -28,6 +28,17 @@
 //
 //*****************************************************************************
 
+#if defined (__cplusplus)
+//*****************************************************************************
+//
+// The entry point for the C++ library startup
+//
+//*****************************************************************************
+extern "C" {
+extern void __libc_init_array(void);
+}
+#endif
+
 #define WEAK __attribute__ ((weak))
 #define ALIAS(f) __attribute__ ((weak, alias (#f)))
 
@@ -94,6 +105,8 @@ extern int main(void);
 //
 //*****************************************************************************
 extern void _vStackTop(void);
+
+extern void SystemInit(void);
 
 //*****************************************************************************
 #if defined (__cplusplus)
@@ -199,6 +212,14 @@ ResetISR(void) {
 		*dst++ = 0;
 
 	SystemInit();
+	
+#if defined (__cplusplus)
+//
+// Call C++ library initialisation
+//
+	__libc_init_array();
+#endif
+
 	main();
 
 	while (1) {
