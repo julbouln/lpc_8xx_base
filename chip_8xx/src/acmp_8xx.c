@@ -122,6 +122,7 @@ void Chip_ACMP_SetupVoltLadder(LPC_CMP_T *pACMP, uint32_t ladsel, bool ladrefVDD
 {
 	uint32_t reg = pACMP->LAD & ~(ACMP_LADSEL_MASK | ACMP_LADREF_MASK);
 
+	ladsel = ladsel << 1;
 	/* Setup voltage ladder and ladder reference */
 	if (ladrefVDDCMP) {
 		reg |= ACMP_LADREF_MASK;

@@ -109,9 +109,7 @@ extern void _vStackTop(void);
 extern void SystemInit(void);
 
 //*****************************************************************************
-#if defined (__cplusplus)
-} // extern "C"
-#endif
+
 //*****************************************************************************
 //
 // The vector table.
@@ -281,4 +279,7 @@ void IntDefaultHandler(void)
     }
 }
 
+#if defined (__cplusplus)
+} // extern "C"
+#endif
 

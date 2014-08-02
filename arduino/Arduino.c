@@ -36,6 +36,12 @@ void delay(unsigned long ms) {
 	while ((msTicks-now) < ms);
 }
 
+void delayMicroseconds(unsigned long us) {
+	uint32_t now = msTicks;
+	while ((msTicks-now) < us/1000);
+}
+
+
 unsigned long millis() {
 	return msTicks;
 }

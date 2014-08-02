@@ -9,7 +9,9 @@ LDSCRIPT=core/$(MCU).ld
 
 
 C_SRC=$(wildcard core/*.c) $(wildcard chip_8xx/src/*.c) $(wildcard arduino/*.c)
-CXX_SRC=$(wildcard core/*.cpp) $(wildcard *.cpp) $(wildcard arduino/*.cpp)
+CXX_SRC=$(wildcard core/*.cpp) $(wildcard *.cpp) $(wildcard arduino/*.cpp) $(wildcard libraries/*/*.cpp)
+
+LIBRARIES=$(wildcard libraries/*)
 
 C_OBJECTS=$(C_SRC:.c=.o)
 C_DEPS=$(C_SRC:.c=.d)
@@ -28,13 +30,22 @@ GCFLAGS +=  -fstrict-aliasing -fsingle-precision-constant -funsigned-char -funsi
 # Debug stuff
 GCFLAGS += -Wa,-adhlns=$(<:.c=.lst) -g
 
-GCFLAGS = -Os --specs=nano.specs -ffunction-sections -fdata-sections -fno-builtin -mthumb -mcpu=cortex-m0plus -MD   -Ichip_8xx/inc -Iarduino -D__USE_CMSIS -DMCU$(MCU) 
+#GCFLAGS = -Os --specs=nano.specs -ffunction-sections -fdata-sections -fno-builtin -mthumb -mcpu=cortex-m0plus -MD   -Ichip_8xx/inc -Iarduino  -DMCU$(MCU) 
+#GCFLAGS += -fno-rtti -fno-exceptions -fpermissive
 
-GCFLAGS += -fno-rtti -fno-exceptions -fpermissive
+
+GCFLAGS = -Os --specs=nano.specs 
+#-flto 
+GCFLAGS += -ffunction-sections -fdata-sections -fno-builtin
+GCFLAGS += -mthumb -mcpu=cortex-m0plus
+GCFLAGS += -fno-rtti -fno-exceptions -fpermissive 
+GCFLAGS += -ffast-math 
+GCFLAGS += -D__USE_CMSIS -DUSE_ROM_API -DARDUINO=100 -DMCU$(MCU)
+GCFLAGS += -Ichip_8xx/inc -Iarduino $(foreach d, $(LIBRARIES), -I$d)
 
 LDFLAGS = -T$(LDSCRIPT) -Wl,-M,--gc-section > firmware.map
-
-#LDFLAGS = -T$(LDSCRIPT) -Wl,--gc-sections
+#LDCFLAGS = -T$(LDSCRIPT) --specs=nano.specs -Wl,-M,--gc-sections
+#LDFLAGS = -T$(LDSCRIPT) -lc -lnosys -Wl,-M,--gc-sections > firmware.map
 
 #  Compiler/Linker Paths
 GCC = arm-none-eabi-gcc
@@ -57,7 +68,7 @@ endif
 	
 firmware.bin: $(PROJECT).elf Makefile
 	@$(OBJCOPY) --strip-unneeded -O ihex $(PROJECT).elf firmware.hex
-	@$(OBJCOPY) -R .stack -O binary $(PROJECT).elf firmware.bin
+	@$(OBJCOPY) --strip-unneeded -R .stack -O binary $(PROJECT).elf firmware.bin
 
 
 $(PROJECT).elf: $(C_OBJECTS) $(CXX_OBJECTS) Makefile
@@ -97,7 +108,9 @@ clean:
 #########################################################################
 
 flash:
-	lpc21isp firmware.hex /dev/cu.usbserial-AM01R02J 115200 14746
-
+#	lpc21isp firmware.hex /dev/cu.usbserial-AM01R02J 115200 14746
+	tools/mcp2200_isp
+	lpc21isp firmware.hex /dev/cu.usbmodem1411 115200 14746
+	tools/mcp2200_boot
 .PHONY : clean all flash stats debug
 

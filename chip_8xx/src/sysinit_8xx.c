@@ -68,7 +68,7 @@ void Chip_SystemInit(void)
 	cmd[0] = Chip_Clock_GetIntOscRate() / 1000; /* in KHz */
 	cmd[1] = 24000000 / 1000; /* 24MHz system clock rate */
 	cmd[2] = CPU_FREQ_EQU;
-	cmd[2] = 24000000 / 10000;
+	cmd[3] = 24000000 / 10000;
 	LPC_PWRD_API->set_pll(cmd, resp);
 
 	/* Dead loop on fail */

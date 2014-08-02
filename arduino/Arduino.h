@@ -35,8 +35,12 @@ int analogRead(uint8_t);
 void analogWrite(uint8_t, int);
 
 void delay(unsigned long);
+void delayMicroseconds(unsigned long);
 
 unsigned long millis(void);
+
+void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val);
+uint8_t shiftIn(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder);
 
 extern void setup(void);
 extern void loop(void);
