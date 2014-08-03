@@ -142,3 +142,10 @@ HardwareSerial Serial(0);
 HardwareSerial Serial1(1);
 #endif
 
+// for printf
+extern "C" {
+	void uart_putchar(char c)
+	{
+		Serial.print(c);
+	}
+}
