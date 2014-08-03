@@ -27,6 +27,7 @@ extern "C" void * _sbrk (int n)
 
 // Approximate some math func for size optimization
 // https://code.google.com/p/fastapprox/
+
 extern "C" float
 fastpow2 (float p)
 {
@@ -53,40 +54,20 @@ fastlog2 (float x)
 }
 
 extern "C" float
-fastlog (float x)
+log (float x)
 {
   return 0.69314718f * fastlog2 (x);
 }
 
 extern "C" float
-fastpow (float x,
+pow (float x,
          float p)
 {
   return fastpow2 (p * fastlog2 (x));
 }
 
 extern "C" float
-fastexp (float p)
+exp (float p)
 {
   return fastpow2 (1.442695040f * p);
-}
-
-
-// redefinitions
-
-
-extern "C" double log(double x)
-{
-	return (double) fastlog((float) x);
-}
-
-extern "C" double exp(double x)
-{
-	return (double) fastexp((float) x);
-}
-
-
-extern "C" double pow(double x, double y)
-{
-	return (double) fastpow((float) x,(float) y);
 }

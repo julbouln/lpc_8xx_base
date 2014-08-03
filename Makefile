@@ -22,30 +22,17 @@ CXX_DEPS=$(CXX_SRC:.cpp=.d)
 CXX_LSTFILES=$(CXX_SRC:.cpp=.lst)
 
 #  Compiler Options
-GCFLAGS = -std=gnu99  -mcpu=cortex-m0plus -mthumb -O$(OPTIMIZATION) -I. -Ichip_8xx/inc -Iarduino
-# Warnings
-GCFLAGS += -Wno-strict-aliasing -Wstrict-prototypes -Wundef -Wall -Wextra -Wunreachable-code 
-# Optimizazions
-GCFLAGS +=  -fstrict-aliasing -fsingle-precision-constant -funsigned-char -funsigned-bitfields -fshort-enums -fno-builtin -ffunction-sections -fno-common -fdata-sections -fpermissive 
-# Debug stuff
-GCFLAGS += -Wa,-adhlns=$(<:.c=.lst) -g
-
-#GCFLAGS = -Os --specs=nano.specs -ffunction-sections -fdata-sections -fno-builtin -mthumb -mcpu=cortex-m0plus -MD   -Ichip_8xx/inc -Iarduino  -DMCU$(MCU) 
-#GCFLAGS += -fno-rtti -fno-exceptions -fpermissive
-
-
 GCFLAGS = -Os --specs=nano.specs 
 #-flto 
 GCFLAGS += -ffunction-sections -fdata-sections -fno-builtin
 GCFLAGS += -mthumb -mcpu=cortex-m0plus
 GCFLAGS += -fno-rtti -fno-exceptions -fpermissive 
-GCFLAGS += -ffast-math 
-GCFLAGS += -D__USE_CMSIS -DUSE_ROM_API -DARDUINO=100 -DMCU$(MCU)
+# who needs precision maths with this sort of chip ?
+GCFLAGS += -ffast-math -fshort-double
+GCFLAGS += -DFLOAT_ONLY -D__USE_CMSIS -DUSE_ROM_API -DARDUINO=100 -DMCU$(MCU)
 GCFLAGS += -Ichip_8xx/inc -Iarduino $(foreach d, $(LIBRARIES), -I$d)
 
 LDFLAGS = -T$(LDSCRIPT) -Wl,-M,--gc-section > firmware.map
-#LDCFLAGS = -T$(LDSCRIPT) --specs=nano.specs -Wl,-M,--gc-sections
-#LDFLAGS = -T$(LDSCRIPT) -lc -lnosys -Wl,-M,--gc-sections > firmware.map
 
 #  Compiler/Linker Paths
 GCC = arm-none-eabi-gcc
