@@ -7,6 +7,8 @@ extern "C"{
 	
 #include <stdio.h>
 #include "chip.h"
+#include "HardwareSerial.h"
+	
 
 #define HIGH 0x1
 #define LOW  0x0

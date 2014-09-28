@@ -47,7 +47,15 @@
 #define SERIAL_7O2 UART_CFG_DATALEN_7 | UART_CFG_PARITY_ODD | UART_CFG_STOPLEN_2
 #define SERIAL_8O2 UART_CFG_DATALEN_8 | UART_CFG_PARITY_ODD | UART_CFG_STOPLEN_2
 
+#ifdef __cplusplus
+extern "C"{
+#endif // __cplusplus
+
 #include "uart_8xx.h"
+
+#ifdef __cplusplus
+} // extern "C"
+#endif // __cplusplus
 
 struct ring_buffer;
 

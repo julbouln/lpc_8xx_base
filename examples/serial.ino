@@ -1,5 +1,4 @@
-#include "Arduino.h"
-#include "HardwareSerial.h"
+#include <Arduino.h>
 
 void setup() {	
     Serial.begin(9600);

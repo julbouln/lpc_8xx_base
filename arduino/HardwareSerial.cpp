@@ -29,8 +29,6 @@
 
 #include "Arduino.h"
 
-#include "HardwareSerial.h"
-
 // Constructors ////////////////////////////////////////////////////////////////
 
 HardwareSerial::HardwareSerial(int uart_n)
