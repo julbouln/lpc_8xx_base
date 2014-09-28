@@ -57,22 +57,13 @@ void TwoWire::begin(void)
 {
 	ErrorCode_t error_code;
 	
-	Serial.println("begin");	
-	
 	Chip_SWM_MovablePinAssign(SWM_I2C_SDA_IO, 11);
 	Chip_SWM_MovablePinAssign(SWM_I2C_SCL_IO, 10);
 		
 	Chip_I2C_Init();
 	
-	Serial.println(LPC_I2CD_API->i2c_get_firmware_version(),HEX);
-
 	i2cHandleMaster = LPC_I2CD_API->i2c_setup(LPC_I2C_BASE, i2cMasterHandleMEM);
 	error_code=LPC_I2CD_API->i2c_set_bitrate(i2cHandleMaster, Chip_Clock_GetSystemClockRate(),I2C_BITRATE);
-
-	Serial.println(LPC_I2CD_API->i2c_get_status(i2cHandleMaster),HEX);
-
-	Serial.println(error_code,HEX);	
-
 }
 
 void TwoWire::begin(uint8_t address)
@@ -114,10 +105,15 @@ uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint8_t sendStop
 
 	rxBufferIndex = 0;
 	rxBufferLength = result.n_bytes_recd+1;
-	read();
+
+	if(quantity>1)
+	  read();
+
 	/* Note results are only valid when there are no errors */
-//	return recvData[1];
-	return result.n_bytes_recd;
+	if(error_code)
+		return 0;
+	else
+		return result.n_bytes_recd;
 }
 
 uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity)
@@ -146,7 +142,7 @@ void TwoWire::beginTransmission(uint8_t address)
     txBufferIndex = 0;
     txBufferLength = 0;
 	
-	write(txAddress);
+    write(txAddress);
 }
 
 void TwoWire::beginTransmission(int address)
@@ -192,13 +188,15 @@ uint8_t TwoWire::endTransmission(uint8_t sendStop)
 	/* Do master write transfer */
 	error_code = LPC_I2CD_API->i2c_master_transmit_poll(i2cHandleMaster, &param, &result);
 
-  	//twi_writeTo(txAddress, txBuffer, txBufferLength, 1, sendStop);
     // reset tx buffer iterator vars
     txBufferIndex = 0;
     txBufferLength = 0;
     // indicate that we are done transmitting
     transmitting = 0;
-    return result.n_bytes_sent;
+	if(error_code)
+		return 4;
+	else
+		return 0;
 }
 
 //	This provides backwards compatibility with the original
@@ -251,14 +249,13 @@ int TwoWire::available(void)
 int TwoWire::read(void)
 {
 	int value = -1;
-  
-	  // get each successive byte on each call
-	  if(rxBufferIndex < rxBufferLength){
-	    value = rxBuffer[rxBufferIndex];
-	    ++rxBufferIndex;
-	  }
 
-	  return value;
+	// get each successive byte on each call
+	if(rxBufferIndex < rxBufferLength){
+	    value = rxBuffer[rxBufferIndex];
+		++rxBufferIndex;
+	}
+	return value;
 }
 
 // must be called in:
@@ -268,11 +265,11 @@ int TwoWire::peek(void)
 {
 	int value = -1;
   
-	  if(rxBufferIndex < rxBufferLength){
-	    value = rxBuffer[rxBufferIndex];
-	  }
+	if(rxBufferIndex < rxBufferLength){
+		value = rxBuffer[rxBufferIndex];
+	}
 
-	  return value;
+	return value;
 }
 
 void TwoWire::flush(void)
@@ -283,21 +280,25 @@ void TwoWire::flush(void)
 // behind the scenes function that is called when data is received
 void TwoWire::onReceiveService(uint8_t* inBytes, int numBytes)
 {
+	// UNIMPLEMENTED
 }
 
 // behind the scenes function that is called when data is requested
 void TwoWire::onRequestService(void)
 {
+	// UNIMPLEMENTED
 }
 
 // sets function called on slave write
 void TwoWire::onReceive( void (*function)(int) )
 {
+	// UNIMPLEMENTED
 }
 
 // sets function called on slave read
 void TwoWire::onRequest( void (*function)(void) )
 {
+	// UNIMPLEMENTED
 }
 
 // Preinstantiate Objects //////////////////////////////////////////////////////
