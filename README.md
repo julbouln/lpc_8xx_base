@@ -14,5 +14,5 @@ Supported Arduino functions and libraries :
 
 INO files can be compiled with ino2firmware.sh script.
 
-Library go with hardware composed of a MCP2200 USB to UART and a LPC812 chip.
+Code come with an hardware implementation composed of a MCP2200 USB to UART and a LPC812 chip.
 https://github.com/julbouln/mcp2200_simpleio and lpc21isp must be installed and tools in tools/ compiled to use "make flash" which upload firmware.hex.
