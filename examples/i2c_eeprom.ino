@@ -1,8 +1,5 @@
-#include "Arduino.h"
-#include "Arduino.h"
-#include "HardwareSerial.h"
-
-#include "Wire.h"
+#include <Arduino.h>
+#include <Wire.h>
 
 // I2C 24C02 eeprom
 
