@@ -29,6 +29,10 @@
 
 #include "Arduino.h"
 
+#define UART0 0
+#define UART1 1
+#define UART2 2
+
 // Constructors ////////////////////////////////////////////////////////////////
 
 HardwareSerial::HardwareSerial(int uart_n)
@@ -60,22 +64,28 @@ void HardwareSerial::begin(unsigned long baud, byte config, int tx, int rx)
 {
 	Chip_Clock_SetUARTClockDiv(1);	/* divided by 1 */
 
-
-	if(_uart_n) {
-	/* Connect the U0_TXD_O and U0_RXD_I signals  */
+	switch(_uart_n) {
+		case UART0:
+		/* Connect the U0_TXD_O and U0_RXD_I signals  */
+		Chip_SWM_MovablePinAssign(SWM_U0_TXD_O, tx);
+		Chip_SWM_MovablePinAssign(SWM_U0_RXD_I, rx);
+		_uart=(LPC_USART_T *)(LPC_USART0_BASE);
+		break;
+		case UART1:
+		break;
 		Chip_SWM_MovablePinAssign(SWM_U1_TXD_O, tx);
 		Chip_SWM_MovablePinAssign(SWM_U1_RXD_I, rx);
 		_uart=(LPC_USART_T *)(LPC_USART1_BASE);
+		break;
+		case UART2:
+		Chip_SWM_MovablePinAssign(SWM_U2_TXD_O, tx);
+		Chip_SWM_MovablePinAssign(SWM_U2_RXD_I, rx);
+		_uart=(LPC_USART_T *)(LPC_USART2_BASE);
+		break;
+		default:
+		break;
 	}
-	else
-	{
-//		Chip_SWM_DisableFixedPin(SWM_FIXED_ACMP_I1);
-		
-		Chip_SWM_MovablePinAssign(SWM_U0_TXD_O, tx);
-		Chip_SWM_MovablePinAssign(SWM_U0_RXD_I, rx);
-		_uart=(LPC_USART_T *)(LPC_USART0_BASE);		
-	}
-	
+
 	Chip_UART_Init(_uart);
 //	Chip_UART_ConfigData(_uart, UART_CFG_DATALEN_8 | UART_CFG_PARITY_NONE | UART_CFG_STOPLEN_1);
 	
@@ -135,9 +145,10 @@ HardwareSerial::operator bool() {
 	return true;
 }
 
-HardwareSerial Serial(0);
+HardwareSerial Serial(UART0);
 #ifndef MCUlpc810
-HardwareSerial Serial1(1);
+HardwareSerial Serial1(UART1);
+HardwareSerial Serial2(UART2);
 #endif
 
 // for printf

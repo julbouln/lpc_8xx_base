@@ -24,6 +24,10 @@
 
 #include <Arduino.h>
 
+#ifdef __cplusplus
+extern "C"{
+#endif // __cplusplus
+
 uint8_t shiftIn(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder) {
 	uint8_t value = 0;
 	uint8_t i;
@@ -53,3 +57,7 @@ void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, uint8_t val)
 		digitalWrite(clockPin, LOW);		
 	}
 }
+
+#ifdef __cplusplus
+} // extern "C"
+#endif // __cplusplus

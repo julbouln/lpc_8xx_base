@@ -1,5 +1,4 @@
 #include "Arduino.h"
-#include "HardwareSerial.h"
 
 int main(void)
 {
@@ -14,7 +13,7 @@ int main(void)
         setup();
     
 		/* Disable the clock to the Switch Matrix to save power */
-		Chip_Clock_DisablePeriphClock(SYSCTL_CLOCK_SWM);
+       	Chip_Clock_DisablePeriphClock(SYSCTL_CLOCK_SWM);
 	
         while (1) {
             loop();

@@ -1,5 +1,9 @@
 #include "Arduino.h"
 
+#ifdef __cplusplus
+extern "C"{
+#endif // __cplusplus
+
 const uint32_t OscRateIn = 12000000;
 const uint32_t ExtRateIn = 0;
 
@@ -45,3 +49,7 @@ void delayMicroseconds(unsigned long us) {
 unsigned long millis() {
 	return msTicks;
 }
+#ifdef __cplusplus
+} // extern "C"
+#endif // __cplusplus
+

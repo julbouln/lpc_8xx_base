@@ -8,7 +8,7 @@ extern "C"{
 #include <stdio.h>
 #include "chip.h"
 #include "HardwareSerial.h"
-	
+#include "binary.h"	
 
 #define HIGH 0x1
 #define LOW  0x0
@@ -47,8 +47,12 @@ uint8_t shiftIn(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder);
 extern void setup(void);
 extern void loop(void);
 
-
 #ifdef __cplusplus
 } // extern "C"
 #endif // __cplusplus
+
+// WMath prototypes
+long map(long, long, long, long, long);
+
+
 #endif
