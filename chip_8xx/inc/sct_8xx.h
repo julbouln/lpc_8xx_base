@@ -125,7 +125,7 @@ typedef struct {
 
 	};
 
-	__IO uint32_t OUTPUT;				/*!< output register */
+	__IO uint32_t OUTPUTR;				/*!< output register */
 	__IO uint32_t OUTPUTDIRCTRL;		/*!< output counter direction Control Register */
 	__IO uint32_t RES;					/*!< conflict resolution register */
 	__IO uint32_t DMA0REQUEST;			/*!< DMA0 Request Register */
